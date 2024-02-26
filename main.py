@@ -9,11 +9,13 @@ def load_access_token():
         access_token = file.read().strip()
     return access_token
 
-# 사용 예시
 KAKAO_TOKEN = load_access_token()
+
+# 중복방지 send_lists 리스트 생성
 send_lists = []
 
 
+#카카오톡 나에게보내기 설정
 def send_to_kakao(text):
     header = {"Authorization": 'Bearer ' + KAKAO_TOKEN}
     url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
@@ -64,7 +66,7 @@ def crawl_board_items(board_url, target_keywords):
                         if s["title_text"] == title_text:
                             print("중복")
                             send = False
-                            break  # 중복된 게시물이 발견되면 더 이상 검사하지 않고 중단합니다.
+                            break  # 중복된 게시물이 발견되면 더 이상 검사하지 않고 중단
 
                     if send:
                         text = f'게시물 제목: {title_text}\n게시글 링크: https://www.fmkorea.com/{title["href"]}\n작성자: {author}\n'
@@ -89,4 +91,5 @@ target_keywords = ["보먹돼", "연어"]
 # 크롤링 함수를 호출하여 게시판에서 원하는 키워드가 포함된 게시글을 찾습니다.
 while True:
     crawl_board_items(board_url, target_keywords)
-    time.sleep(30)
+    time.sleep(1800)
+    # 현재 30분 간격으로 자동확인
