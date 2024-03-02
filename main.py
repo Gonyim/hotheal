@@ -14,7 +14,6 @@ KAKAO_TOKEN = load_access_token()
 # 중복방지 send_lists 리스트 생성
 send_lists = []
 
-
 #카카오톡 나에게보내기 설정
 def send_to_kakao(text):
     header = {"Authorization": 'Bearer ' + KAKAO_TOKEN}
@@ -36,7 +35,6 @@ def send_to_kakao(text):
     except Exception as e:
         print("카카오톡 전송 중 오류 발생:", e)
         return None
-
 
 def crawl_board_items(board_url, target_keywords):
     # HTTP GET 요청을 보냅니다.
@@ -70,10 +68,6 @@ def crawl_board_items(board_url, target_keywords):
 
                     if send:
                         text = f'게시물 제목: {title_text}\n게시글 링크: https://www.fmkorea.com/{title["href"]}\n작성자: {author}\n'
-                        # print("게시글 제목:", title_text)
-                        # print("게시글 링크:", f'https://www.fmkorea.com/{title["href"]}')
-                        # print("작성자:", author)
-                        # print()  # 개행을 통해 각 게시글 정보를 구분합니다.
                         r = send_to_kakao(text)
                         if r is not None:
                             print(r)  # 카카오톡 전송 결과를 출력합니다.
@@ -88,8 +82,11 @@ def crawl_board_items(board_url, target_keywords):
 board_url = "https://www.fmkorea.com/hotdeal"
 target_keywords = ["보먹돼", "연어"]
 
-# 크롤링 함수를 호출하여 게시판에서 원하는 키워드가 포함된 게시글을 찾습니다.
+
 while True:
-    crawl_board_items(board_url, target_keywords)
-    time.sleep(1800)
-    # 현재 30분 간격으로 자동확인
+    try:
+        crawl_board_items(board_url, target_keywords)
+        time.sleep(60)
+    except Exception as e:
+        print("에러 발생:", e)
+
